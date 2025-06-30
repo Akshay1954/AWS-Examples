@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "== Copy object =="
+
+if [ -z $1 ]; then
+	echo "Usage: ./copy_object <BUCKET_NAME> <file_name>"
+	exit 1
+fi
+
+if [ -z $2 ]; then
+	echo "Usage: ./copy_object <BUCKET_NAME> <file_name>"
+	exit 1
+fi
+
+
+BUCKET_NAME="$1"
+DIRECTORY="$2"
+
+aws s3 cp "$DIRECTORY" s3://"$BUCKET_NAME"/files --recursive

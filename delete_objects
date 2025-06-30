@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "Usage: ./delete_objects <bucket_name>"
+	exit 1
+fi
+
+BUCKET_NAME="$1"
+
+aws s3 rm s3://"$BUCKET_NAME" --recursive
+
+
