@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Create a VPC (Route table is created by default)
+echo "Creating VPC"
+VPC_ID=$(aws ec2 create-vpc \
+--cidr-block 173.1.0.0/16 \
+--tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=my-VPC}]' \
+--query Vpc.VpcId \
+--output text
+)
+echo "VPC Created !!"
+echo "VPC ID : $VPC_ID"
+
+
+# Create a Internet Gateway IGW
+echo "Creating IGW"
+IGW_ID=$(aws ec2 create-internet-gateway \
+--tag-specifications \
+'ResourceType=internet-gateway,Tags=[{Key=Name,Value=my-igw-01}]' \
+--query InternetGateway.InternetGatewayId \
+--output text
+)
+echo "IGW Created !!"
+
+echo "IGW_ID : $IGW_ID"
+
+
+# Attach the IGW to the VPC
+echo "Attaching IGW to VPC"
+aws ec2 attach-internet-gateway \
+--internet-gateway-id "$IGW_ID" \
+--vpc-id "$VPC_ID"
+echo "Attached Successfully !!"
+
+
+# Create a new Subnet
+echo "Creating Subnet 1"
+SUB_ID=$(aws ec2 create-subnet \
+--vpc-id "$VPC_ID" \
+--cidr-block 173.1.16.0/20 \
+--tag-specifications \
+'ResourceType=subnet,Tags=[{Key=Name,Value=my-subnet-01}]' \
+--query Subnet.SubnetId \
+--output text
+)
+
+echo "SUB_ID : $SUB_ID"
+
+# Get the Route Table ID
+
+RT_ID=$(aws ec2 describe-route-tables \
+--filters "Name=vpc-id,Values=$VPC_ID" \
+--query RouteTables[].RouteTableId \
+--output text
+)
+
+echo "RT_ID : $RT_ID"
+
+# Explicitly associate a subnet with a route table
+echo "Explicitly Associating a subnet to a Route Table"
+aws ec2 associate-route-table \
+--route-table-id "$RT_ID" \
+--subnet-id "$SUB_ID"
+echo "Successfully associated"
+
+# Modify VPC attribute to enable DNS hostnames
+aws ec2 modify-vpc-attribute \
+--vpc-id "$VPC_ID" \
+--enable-dns-hostnames Value=true
+
+
+# Add a route to our IGW
+echo "Adding route to the IGW"
+aws ec2 create-route \
+--route-table-id "$RT_ID" \
+--destination-cidr-block 0.0.0.0/0 \
+--gateway-id "$IGW_ID"
+
+echo "Successfully Added"

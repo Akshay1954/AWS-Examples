@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Delete a VPC 
+
+if [ -z "$1" ]; then
+	echo '[!] Usage: ./delete_vpc <VPC_ID>'
+else
+	echo "Deleting VPC"
+	aws ec2 delete-vpc --vpc-id "$1"
+	echo "Successfully deleted !!!"
+fi
+
+# Detach the IGW
+
+
+# Delete the IGW
+
+
+

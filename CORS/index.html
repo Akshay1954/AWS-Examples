@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>CORS Fetch Demo</title>
+</head>
+<body>
+    <h1>CORS Fetch Demo</h1>
+    <p>This page fetches a JS file from another S3 bucket and runs it.</p>
+
+    <script>
+        // Replace with your actual S3 bucket JS file URL
+        const jsUrl = "https://my-aws-bucket-aps2.s3.us-east-1.amazonaws.com/hello.js";
+
+        fetch(jsUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok: " + response.statusText);
+                }
+                return response.text();
+            })
+            .then(scriptContent => {
+                // Evaluate the fetched JS code
+                eval(scriptContent);
+            })
+            .catch(error => {
+                console.error("Failed to fetch and run JS:", error);
+                document.body.innerHTML += `<p style="color:red;">❌ Failed to load JS: ${error}</p>`;
+            });
+    </script>
+</body>
+</html>

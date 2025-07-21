@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Create Website 1
+
+# Create Bucket
+aws s3 mb s3://my-aws-bucket-aps1
+
+# Change block public access
+
+aws s3api put-public-access-block \
+    --bucket my-aws-bucket-aps1 \
+    --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+# Create Bucket Policy
+# put a bucket policy to the S3 bucket
+
+aws s3api put-bucket-policy --bucket my-aws-bucket-aps1 --policy file://S3_Bucket_policy_for_CORS.json
+
+
+
+# Turn on Static website hosting
+aws s3api put-bucket-website --bucket my-aws-bucket-aps1 --website-configuration file://website.json
+
+
+# Upload the index.html file and include the resource that would be cross origin
+aws s3 cp index.html s3://my-aws-bucket-aps1
+
+
+
+
+# Create Website 2
+aws s3 mb s3://my-aws-bucket-aps2
+
+
+# Change block public access
+
+aws s3api put-public-access-block \
+    --bucket my-aws-bucket-aps2 \
+    --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+# Create Bucket Policy
+# put a bucket policy to the S3 bucket
+
+aws s3api put-bucket-policy --bucket my-aws-bucket-aps2 --policy file://bucket-policy2.json
+
+
+
+# Turn on Static website hosting
+aws s3api put-bucket-website --bucket my-aws-bucket-aps2 --website-configuration file://website.json
+
+
+# Upload the js file and include the resource that would be cross origin
+aws s3 cp hello.js s3://my-aws-bucket-aps2
+
+# When your HTML file (in Bucket 1) does this:
+
+# fetch("https://bucket-2.s3.amazonaws.com/hello.js")
+
+# the browser sends a cross-origin HTTP request to Bucket 2 because:
+
+# The HTML page’s origin is https://bucket-1.s3.amazonaws.com.
+
+# The JS file’s origin is https://bucket-2.s3.amazonaws.com.
+
+
+# These are different origins, so CORS applies.
+
+# The browser asks Bucket 2:
+
+# “Do you allow requests from https://bucket-1.s3.amazonaws.com?”
+
+# If Bucket 2 doesn’t have a CORS policy allowing it, the browser will block the response.
+
+
+
+# Now make a CORS configuration for Bucket 2
+
+aws s3api put-bucket-cors --bucket my-aws-bucket-aps2 --cors-configuration file://cors.json
+

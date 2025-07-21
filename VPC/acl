@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Get VPC ID
+VPC_ID=$(aws ec2 describe-vpcs \
+--filters "Name=tag:Name,Values=my-VPC" \
+--query Vpcs[0].VpcId \
+--output text
+)
+
+# Create a network-acl and record the ACL ID
+ACL_ID=$(aws ec2 create-network-acl \
+--vpc-id "$VPC_ID" \
+--tag-specifications \
+'ResourceType=network-acl,Tags=[{Key=Name,Value=my-network-acl}]' \
+--query NetworkAcl.NetworkAclId \
+--output text
+)
+
+# Create a acl entry (allow/deny rule) (this is Outbound Rule - outgoing traffic)
+aws ec2 create-network-acl-entry \
+--network-acl-id "$ACL_ID" \
+--rule-number 100 \
+--protocol tcp \
+--rule-action allow \
+--egress \
+--port-range From=1024,To=65535 \
+--cidr-block 0.0.0.0/0
+
+# Create a acl entry (allow/deny rule) (this is Inbound Rule - incomming traffic)
+aws ec2 create-network-acl-entry \
+--network-acl-id "$ACL_ID" \
+--rule-number 100 \
+--protocol tcp \
+--rule-action allow \
+--ingress \
+--port-range From=22,To=22 \
+--cidr-block 0.0.0.0/0
+
+# Get the Default Association ID for Subnet Associations to replace default ACL
+ASSOC_ID=$(aws ec2 describe-network-acls \
+--filters "Name=association.subnet-id,Values=subnet-050b44d463ac0d566" \
+--query NetworkAcls[*].Associations[].NetworkAclAssociationId \
+--output text
+)
+
+
+# Associate the subnet with the ACL
+aws ec2 replace-network-acl-association \
+--association-id "$ASSOC_ID" \
+--network-acl-id "$ACL_ID"
+# Here we keep the NEW ACL ID to replace the default one
+
+
+
+

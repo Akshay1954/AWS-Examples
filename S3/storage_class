@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# create bucket
+aws s3 mb s3://my-aws-bucket-aps
+
+
+# move a local file into the S3 bucket By default s3 storage tier is Standard
+aws s3 cp /home/akshay/shellscript/tmp/file0 s3://my-aws-bucket-aps
+
+# changing the storage tier from Standard to Standard IA
+aws s3 cp s3://my-aws-bucket-aps/file0 s3://my-aws-bucket-aps/file0 \
+--storage-class STANDARD_IA
+
+#clean up removing the files
+aws s3 rm s3://my-aws-bucket-aps --recursive
+
+# remove bucket
+aws s3 rb s3://my-aws-bucket
+
+

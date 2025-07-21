@@ -1,0 +1,12 @@
+#!/bin/bash
+
+aws s3api create-bucket --bucket family-guy-peter-griffin
+
+aws s3api put-object --bucket family-guy-peter-griffin \
+--key Lorem/ipsum/dolor/sit/amet/consectetur/adipiscing/elit/Proin/quam/orci/pretium/vitae/enim/sed/pellentesque/vehicula/est/Donec/sed/massa/sit/amet/diam/posuere/venenatis/non/vel/tellus/Vivamus/consectetur/est/quis/gravida/venenatis/Suspendisse/tempus/feugiat/congue/Nullam/commodo/eu/massa/eu/facilisis/Mauris/cursus/augue/ante/in/dictum/massa/faucibus/eget/Sed/accumsan/nec/massa/non/porta/Class/aptent/taciti/sociosqu/ad/litora/torquent/per/conubia/nostra/per/inceptos/himenaeos/Proin/ultricies/elit/non/facilisis/feugiat/Morbi/ullamcorper/justo/vitae/risus/convallis/laoreet/Aliquam/euismod/vel/massa/in/hendrerit/Vivamus/venenatis/in/ex/at/tristique/Aliquam/erat/volutpat/Praesent/fringilla/et/dui/ac/tempor/Vestibulum/at/purus/ultricies/viverra/tortor/non/tincidunt/sapien/Etiam/mi/arcu/elementum/quis/ultrices/in/malesuada/a/odio/Nulla/a/ante/leo/Ut/dictum/mauris/pulvinar/finibus/lectus/id/interdum/augue/Donec/sit/amet/auctor/sem/Aliquam/nec/molestie/dolor/Phasellus/ultrices/leo/at/la/perla/fsafkjsdfj/dasef/asf/aksha
+
+
+# Try uploading a extra key to the present object key
+aws s3api put-object --bucket family-guy-peter-griffin \
+--key Lorem/ipsum/dolor/sit/amet/consectetur/adipiscing/elit/Proin/quam/orci/pretium/vitae/enim/sed/pellentesque/vehicula/est/Donec/sed/massa/sit/amet/diam/posuere/venenatis/non/vel/tellus/Vivamus/consectetur/est/quis/gravida/venenatis/Suspendisse/tempus/feugiat/congue/Nullam/commodo/eu/massa/eu/facilisis/Mauris/cursus/augue/ante/in/dictum/massa/faucibus/eget/Sed/accumsan/nec/massa/non/porta/Class/aptent/taciti/sociosqu/ad/litora/torquent/per/conubia/nostra/per/inceptos/himenaeos/Proin/ultricies/elit/non/facilisis/feugiat/Morbi/ullamcorper/justo/vitae/risus/convallis/laoreet/Aliquam/euismod/vel/massa/in/hendrerit/Vivamus/venenatis/in/ex/at/tristique/Aliquam/erat/volutpat/Praesent/fringilla/et/dui/ac/tempor/Vestibulum/at/purus/ultricies/viverra/tortor/non/tincidunt/sapien/Etiam/mi/arcu/elementum/quis/ultrices/in/malesuada/a/odio/Nulla/a/ante/leo/Ut/dictum/mauris/pulvinar/finibus/lectus/id/interdum/augue/Donec/sit/amet/auctor/sem/Aliquam/nec/molestie/dolor/Phasellus/ultrices/leo/at/la/perla/fsafkjsdfj/dasef/asf/aksakd/file0 \
+--body /home/akshay/shellscript/tmp/file0
