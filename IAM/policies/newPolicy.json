@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "GetObjectAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::cf-templates-15w3v5jwj0q10-us-east-1/*"
+    },
+    {
+      "Sid": "ListObjectsInSpecificBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::cf-templates-15w3v5jwj0q10-us-east-1"
+    }
+  ]
+}

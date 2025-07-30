@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Create the YAML file for the IAM policy and conver it to json using yq
+
+yq -o=json IAM-policy.yaml > newfile.json
+
+# Create an IAM policy from the json file (s3 full access)
+aws iam create-policy \
+--policy-name my-s3-policy \
+--policy-document file://policy.json
+
+# Attach the policy to a IAM user
+aws iam attach-user-policy \
+--user-name AWS-Examples \
+--policy-arn arn:aws:iam::296062565790:policy/my-s3-policy
+
+# Check if the policy is working (--profile tag to login as IAM user)
+aws s3 ls --profile AWS-Examples
+
+# Create a new policy version of the original policy
+# (Allow access to GetObject and ListObject in a particular bucket)
+
+aws iam create-policy-version \
+--policy-arn arn:aws:iam::296062565790:policy/my-s3-policy \
+--policy-document file://newPolicy.json
+
+
+# Check if the updated policy works or not
+aws s3api get-object \
+--bucket cf-templates-15w3v5jwj0q10-us-east-1 \
+--key 2025-07-29T212111.612Z5k6-IAM.yaml \
+--profile AWS-Examples zzzz.yaml
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Convert the yaml file to json
+
+yq -o=json IAM-policy.yaml > policy.json
+

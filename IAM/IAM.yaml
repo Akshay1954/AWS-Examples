@@ -1,0 +1,65 @@
+Resources:
+  MyUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: 'my-cool-user'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+      Policies:
+        # This will be an inline policy
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+                - Sid: IamListAccess
+                  Effect: Allow
+                  Action:
+                  - 'iam:ListRoles'
+                  - 'iam:ListUsers'
+                  Resource: '*'
+
+
+  MyInlinePolicy:
+    # This will also be a inline policy
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: MyInlinePolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: 'ec2:*'
+            Resource: '*'
+      Users:
+        - !Ref MyUser
+
+  # My2ndInlinePolicy:
+  #   # This will also be an inline policy
+  #   Type: 'AWS::IAM::UserPolicy'
+  #   Properties:
+  #     PolicyName: My2ndInlinePolicy
+  #     PolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: Allow
+  #           Action: 's3:*'
+  #           Resource: '*'
+  #     UserName: !Ref MyUser
+
+  MyManagedPolicy:
+    # This is a customer managed policy 
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Groups:
+        # This will add the Managed Policy to the Admin Group
+        - Admin
+      ManagedPolicyName: MyManagedPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: 's3:*'
+            Resource: '*'
+
+      Users:
+        - !Ref MyUser
